@@ -24,6 +24,13 @@
           <div>
             <button type="submit">search</button>
           </div>
+          <div class="spinner flex items-center">
+            @if (isFetching()) {
+            <div></div>
+            <div></div>
+            <div></div>
+            }
+          </div>
         </form>
       </div>
     </div>

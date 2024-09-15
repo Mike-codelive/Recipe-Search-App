@@ -354,6 +354,14 @@ template {
   display: none;
 }
 
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
 .container {
   width: 100%;
   padding-right: calc(1.5rem * 0.5);

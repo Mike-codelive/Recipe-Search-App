@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
+import { ApiUrl } from './../../enviroments/environment';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
+import { HttpClient } from '@angular/common/http';
+import { Recipe } from '../recipe.model';
+
+const apiUrl = ApiUrl.apiUrl;
 
 @Component({
   selector: 'app-header',
@@ -9,9 +15,28 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  private httpClient = inject(HttpClient);
+  private destroyRef = inject(DestroyRef);
   enteredIngredients = '';
+  isFetching = signal(true);
 
   submitIngredients() {
-    console.log('form submited');
+    if (this.enteredIngredients === '') return;
+    this.isFetching.set(true);
+    const params = { ingredients: this.enteredIngredients.trim() };
+    const subscription = this.httpClient
+      .get<{ recipes: Recipe[] }>(`${apiUrl}search/`, { params })
+      .subscribe({
+        next: (resdata) => {
+          console.log(resdata);
+        },
+        complete: () => {
+          this.isFetching.set(false);
+        },
+      });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 }
