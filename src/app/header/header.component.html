@@ -1,11 +1,31 @@
 <header>
-  <div class="hero-img">
-    <img
-      src="assets/hero-main-recipe-finder.svg"
-      alt="Main recipe finder app logo"
-    />
-  </div>
-  <div class="hero-title">
-    <h1>delicious food</h1>
+  <div class="hero-container">
+    <div class="hero-img">
+      <img
+        src="assets/hero-main-recipe-finder.svg"
+        alt="Main recipe finder app logo"
+      />
+    </div>
+    <div class="hero-title">
+      <h1>delicious food</h1>
+      <h2>don't know what to eat? search by ingredients</h2>
+      <div class="hero-form">
+        <form (ngSubmit)="submitIngredients()">
+          <div>
+            <label for="ingredients"></label>
+            <input
+              type="text"
+              id="ingredients"
+              name="ingredients"
+              placeholder="example... beef Garlic"
+              [(ngModel)]="enteredIngredients"
+            />
+          </div>
+          <div>
+            <button type="submit">search</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </header>
