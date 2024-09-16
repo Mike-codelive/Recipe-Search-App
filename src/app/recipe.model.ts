@@ -1,9 +1,9 @@
 export interface Recipe {
-  recipes: [
-    {
-      id: number;
-      title: string;
-      image: string;
-    }
-  ];
+  id: number;
+  title: string;
+  image: string;
+}
+
+export interface ApiResponse {
+  recipes: Recipe[];
 }

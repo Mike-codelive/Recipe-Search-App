@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../recipe.model';
+import { RecipeService } from '../services/recipe.service';
 
 const apiUrl = ApiUrl.apiUrl;
 
@@ -15,20 +16,29 @@ const apiUrl = ApiUrl.apiUrl;
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  private recipeService = inject(RecipeService);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
-  enteredIngredients = '';
-  isFetching = signal(true);
+  enteredIngredients = signal('');
+  isFetching = signal(false);
+
+  ingredientsInParams() {
+    const params = { ingredients: this.enteredIngredients().trim() };
+    return params;
+  }
 
   submitIngredients() {
-    if (this.enteredIngredients === '') return;
+    if (this.enteredIngredients() === '') return;
     this.isFetching.set(true);
-    const params = { ingredients: this.enteredIngredients.trim() };
+
+    const params = this.ingredientsInParams();
+
     const subscription = this.httpClient
       .get<{ recipes: Recipe[] }>(`${apiUrl}search/`, { params })
       .subscribe({
         next: (resdata) => {
           console.log(resdata);
+          this.recipeService.recipes.set(resdata.recipes);
         },
         complete: () => {
           this.isFetching.set(false);
