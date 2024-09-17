@@ -1,0 +1,40 @@
+.recipes-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 1fr);
+  gap: 20px;
+  justify-content: center;
+}
+
+.match-ingredients {
+  height: 1.5rem;
+  filter: brightness(0) saturate(100%) invert(85%) sepia(86%) saturate(1577%)
+    hue-rotate(130deg) brightness(95%) contrast(89%);
+}
+
+.missed-ingredients {
+  filter: brightness(0) saturate(100%) invert(74%) sepia(88%) saturate(6532%)
+    hue-rotate(338deg) brightness(89%) contrast(103%);
+}
+
+.recipe {
+  background-color: #212121;
+  border-radius: 1rem;
+  transition: background-color, 0.3s;
+}
+
+.recipe:hover {
+  background-color: #212121c9;
+}
+
+.recipe-img {
+  max-width: 320px;
+  max-height: 231px;
+}
+
+.ingredients {
+  height: 1.5rem;
+}
+
+ol {
+  padding-left: 1rem;
+}

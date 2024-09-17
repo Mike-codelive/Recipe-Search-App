@@ -36,9 +36,9 @@ export class HeaderComponent {
     const subscription = this.httpClient
       .get<{ recipes: Recipe[] }>(`${apiUrl}search/`, { params })
       .subscribe({
-        next: (resdata) => {
-          console.log(resdata);
-          this.recipeService.recipes.set(resdata.recipes);
+        next: (resData) => {
+          console.log(resData.recipes);
+          this.recipeService.recipes.set(resData.recipes);
         },
         complete: () => {
           this.isFetching.set(false);

@@ -100,6 +100,11 @@ button {
   animation-delay: -0.16s;
 }
 
+.hero-container {
+  height: 100vh;
+  justify-content: center;
+}
+
 @media (min-width: 500px) {
   img {
     width: 100%;
