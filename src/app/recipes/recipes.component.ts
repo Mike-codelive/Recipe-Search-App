@@ -16,6 +16,4 @@ export class RecipesComponent {
     const roundedNumber = Math.ceil(figure * 10) / 10;
     return roundedNumber;
   }
-
-  // removeSpaceFrom;
 }

@@ -2,7 +2,7 @@ import { ApiUrl } from './../../enviroments/environment';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../services/recipe.service';
 
@@ -23,7 +23,13 @@ export class HeaderComponent {
   isFetching = signal(false);
 
   ingredientsInParams() {
-    const params = { ingredients: this.enteredIngredients().trim() };
+    const ingredientsArray = this.enteredIngredients().split(' ');
+    let params = new HttpParams();
+
+    ingredientsArray.forEach((ingredient) => {
+      params = params.append('ingredients', ingredient);
+    });
+
     return params;
   }
 

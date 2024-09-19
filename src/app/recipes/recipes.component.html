@@ -2,7 +2,11 @@
   @if (recipes()) { @for (recipe of recipes(); track recipe.id) {
 
   <div class="recipe flex flex-col space-between">
-    <img class="recipe-img" [src]="recipe.image" alt="recipe #1" />
+    @if (!recipe.image) {
+    <img class="recipe-img" src="assets/demo-recipe.svg" [alt]="recipe.title" />
+    } @else {
+    <img class="recipe-img" [src]="recipe.image" [alt]="recipe.title" />
+    }
     <h1 class="text-center ml-1-5 mr-1-5">
       {{ recipe.title }}
     </h1>
@@ -11,12 +15,11 @@
       <ol class="w-full ml-1-5 mr-1-5">
         @for (usedIngredient of recipe.usedIngredients; track $index) {
         <li>
-          <div class="flex space-between">
+          <div class="flex space-between items-baseline">
             <div>
               {{ usedIngredient.name }} ({{
                 roundDecimal(usedIngredient.amount)
-              }}
-              @if (usedIngredient.unit){, {{ usedIngredient.unit }}})
+              }}@if (usedIngredient.unit){, {{ usedIngredient.unit }}})
             </div>
             <img
               class="match-ingredients ingredients"
@@ -28,8 +31,10 @@
 
         } @for (unusedIngredient of recipe.missedIngredients; track $index) {
         <li>
-          <div class="flex space-between">
-            {{ unusedIngredient.name }} ({{ unusedIngredient.amount }})
+          <div class="flex space-between items-baseline">
+            {{ unusedIngredient.name }} ({{
+              roundDecimal(unusedIngredient.amount)
+            }}@if (unusedIngredient.unit){, {{ unusedIngredient.unit }}})
             <img
               class="missed-ingredients ingredients"
               src="assets/ingredients-mix.svg"
@@ -42,6 +47,6 @@
     </div>
   </div>
   }} @if (recipes()?.length === 0) {
-  <h1>No recipes was found try again!</h1>
+  <h1 class="text-center">No recipes was found try again!</h1>
   }
 </section>
