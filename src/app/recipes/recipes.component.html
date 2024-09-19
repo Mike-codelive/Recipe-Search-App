@@ -1,39 +1,47 @@
 <section class="recipes-container">
   @if (recipes()) { @for (recipe of recipes(); track recipe.id) {
 
-  <h1>{{ recipe.title }}</h1>
+  <div class="recipe flex flex-col space-between">
+    <img class="recipe-img" [src]="recipe.image" alt="recipe #1" />
+    <h1 class="text-center ml-1-5 mr-1-5">
+      {{ recipe.title }}
+    </h1>
+    <h2 class="text-center mb-1-5">Ingredients</h2>
+    <div class="flex space-around">
+      <ol class="w-full ml-1-5 mr-1-5">
+        @for (usedIngredient of recipe.usedIngredients; track $index) {
+        <li>
+          <div class="flex space-between">
+            <div>
+              {{ usedIngredient.name }} ({{
+                roundDecimal(usedIngredient.amount)
+              }}
+              @if (usedIngredient.unit){, {{ usedIngredient.unit }}})
+            </div>
+            <img
+              class="match-ingredients ingredients"
+              src="assets/ingredients-mix.svg"
+              alt="match ingredient"
+            />
+          </div>
+        </li>
+
+        } @for (unusedIngredient of recipe.missedIngredients; track $index) {
+        <li>
+          <div class="flex space-between">
+            {{ unusedIngredient.name }} ({{ unusedIngredient.amount }})
+            <img
+              class="missed-ingredients ingredients"
+              src="assets/ingredients-mix.svg"
+              alt="missed ingredient"
+            />
+          </div>
+        </li>
+        }
+      </ol>
+    </div>
+  </div>
   }} @if (recipes()?.length === 0) {
   <h1>No recipes was found try again!</h1>
   }
-  <div class="recipe">
-    <img class="recipe-img" src="assets/demo-recipe.svg" alt="recipe #1" />
-    <h1 class="text-center">Spicy Chili w Boneless Beef Short Ribs</h1>
-    <h2 class="text-center mb-1-5">Ingredients</h2>
-    <div class="flex space-around">
-      <div>
-        <div class="flex justify-center">
-          <img
-            class="match-ingredients ingredients"
-            src="assets/ingredients-mix.svg"
-            alt="match ingredients"
-          />
-        </div>
-        <ol>
-          <li>onion (1)</li>
-        </ol>
-      </div>
-      <div>
-        <div class="flex justify-center">
-          <img
-            class="missed-ingredients ingredients"
-            src="assets/ingredients-mix.svg"
-            alt="match ingredients"
-          />
-        </div>
-        <ol>
-          <li>Garlic (2)</li>
-        </ol>
-      </div>
-    </div>
-  </div>
 </section>

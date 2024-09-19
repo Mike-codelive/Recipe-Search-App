@@ -11,4 +11,11 @@ import { RecipeService } from '../services/recipe.service';
 export class RecipesComponent {
   private recipeService = inject(RecipeService);
   recipes = computed(() => this.recipeService.recipes());
+
+  roundDecimal(figure: number) {
+    const roundedNumber = Math.ceil(figure * 10) / 10;
+    return roundedNumber;
+  }
+
+  // removeSpaceFrom;
 }
