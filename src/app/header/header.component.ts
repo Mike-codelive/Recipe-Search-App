@@ -33,6 +33,15 @@ export class HeaderComponent {
     return params;
   }
 
+  checkImageUrl(url: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = url;
+    });
+  }
+
   submitIngredients() {
     if (this.enteredIngredients() === '') return;
     this.isFetching.set(true);
@@ -43,8 +52,15 @@ export class HeaderComponent {
       .get<{ recipes: Recipe[] }>(`${apiUrl}search/`, { params })
       .subscribe({
         next: (resData) => {
-          console.log(resData.recipes);
-          this.recipeService.recipes.set(resData.recipes);
+          const recipesWithValidImages = resData.recipes.map((recipe) => {
+            this.checkImageUrl(recipe.image).then((isActive) => {
+              if (!isActive) {
+                recipe.image = 'assets/demo-recipe.svg';
+              }
+            });
+            return recipe;
+          });
+          this.recipeService.recipes.set(recipesWithValidImages);
         },
         complete: () => {
           this.isFetching.set(false);

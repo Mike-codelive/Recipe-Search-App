@@ -1,6 +1,5 @@
 <section class="recipes-container">
   @if (recipes()) { @for (recipe of recipes(); track recipe.id) {
-
   <div class="recipe flex flex-col space-between">
     @if (!recipe.image) {
     <img class="recipe-img" src="assets/demo-recipe.svg" [alt]="recipe.title" />
@@ -46,7 +45,9 @@
       </ol>
     </div>
   </div>
-  }} @if (recipes()?.length === 0) {
-  <h1 class="text-center">No recipes was found try again!</h1>
-  }
+  }}
 </section>
+
+@if (recipes()?.length === 0) {
+<h3 class="text-center">No recipes was found try again!</h3>
+}
