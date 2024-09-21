@@ -58,48 +58,6 @@ input:focus-visible {
   outline: none;
 }
 
-button {
-  background-color: rgb(255 255 255);
-  border-radius: 20px;
-  padding: 10px;
-  font-weight: bolder;
-  border: 0;
-  cursor: pointer;
-}
-
-.spinner {
-  margin-top: 2.5rem;
-  height: 0;
-  width: 48px;
-}
-
-.spinner div {
-  width: 16px;
-  height: 16px;
-  background: rgb(255 255 255);
-  border-radius: 50%;
-  display: inline-block;
-  animation: bounce 1.4s infinite ease-in-out both;
-}
-
-@keyframes bounce {
-  0%,
-  80%,
-  100% {
-    transform: scale(0);
-  }
-  40% {
-    transform: scale(1);
-  }
-}
-
-.spinner div:nth-child(1) {
-  animation-delay: -0.32s;
-}
-.spinner div:nth-child(2) {
-  animation-delay: -0.16s;
-}
-
 .hero-container {
   height: 100vh;
   justify-content: center;

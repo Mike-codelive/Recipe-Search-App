@@ -13,6 +13,7 @@
   background-color: #212121;
   border-radius: 1rem;
   transition: background-color, 0.3s;
+  min-width: 400px;
 }
 
 .recipe:hover {
@@ -33,6 +34,7 @@
 ol {
   padding-left: 1rem;
   text-transform: capitalize;
+  width: auto;
 }
 
 li {
@@ -40,6 +42,10 @@ li {
 }
 
 @media (min-width: 500px) {
+  .recipe {
+    min-width: fit-content;
+  }
+
   .recipe-img {
     max-height: 231px;
   }
@@ -61,8 +67,13 @@ li {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .recipe-column {
   flex: 1;
+}
+
+.button {
+  max-width: 200px;
 }
