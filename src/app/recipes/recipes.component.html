@@ -44,7 +44,27 @@
           }
         </ol>
         <div class="flex justify-center">
-          <button class="button my-1">Preparation</button>
+          @if (!isFetchingPreparation[recipe.id] &&
+          !recipePreparation[recipe.id]) {
+          <button
+            class="button my-1"
+            (click)="fetchRecipePreparation(recipe.id)"
+          >
+            Preparation
+          </button>
+          } @if (isFetchingPreparation[recipe.id]) {
+          <div class="spinner flex items-center">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          } @if (recipePreparation[recipe.id]) {
+
+          <h3
+            class="mx-1 recipe-instructions"
+            [innerHTML]="recipePreparation[recipe.id]"
+          ></h3>
+          }
         </div>
       </div>
     </div>

@@ -23,3 +23,7 @@ export interface Ingredient {
   extendedName?: string;
   image: string;
 }
+
+export interface RecipeDetails {
+  instructions: string;
+}

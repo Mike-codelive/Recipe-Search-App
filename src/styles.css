@@ -395,6 +395,11 @@ template {
   margin-bottom: 1rem;
 }
 
+.mx-1 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
 .mb-1 {
   margin-bottom: 1rem;
 }
@@ -459,6 +464,10 @@ button {
   padding-left: calc(1.5rem * 0.5);
   margin-right: auto;
   margin-left: auto;
+}
+
+.recipe-instructions li {
+  margin-bottom: 0.8rem;
 }
 
 @media (min-width: 576px) {
