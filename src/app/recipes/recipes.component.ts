@@ -1,7 +1,18 @@
-import { Component, computed, DestroyRef, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  DestroyRef,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  Injector,
+  OnInit,
+} from '@angular/core';
 import { RecipeService } from '../services/recipe.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiUrl } from '../../enviroments/environment';
+import { runInInjectionContext, signal, effect } from '@angular/core';
 
 const apiUrl = ApiUrl.apiUrl;
 
@@ -11,14 +22,41 @@ const apiUrl = ApiUrl.apiUrl;
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })
-export class RecipesComponent {
+export class RecipesComponent implements AfterViewInit, OnInit {
   private recipeService = inject(RecipeService);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
+  private injector = inject(Injector); // Inject the Injector
+
+  @ViewChild('recipesSection') recipesSection!: ElementRef;
+
   recipes = computed(() => this.recipeService.recipes() || []);
 
   isFetchingPreparation: { [recipeId: number]: boolean } = {};
   recipePreparation: { [recipeId: number]: string | undefined } = {};
+
+  ngOnInit() {
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const recipeData = this.recipes();
+        if (recipeData && recipeData.length > 0) {
+          this.scrollToRecipes();
+        }
+      });
+    });
+  }
+
+  ngAfterViewInit() {}
+
+  scrollToRecipes() {
+    setTimeout(() => {
+      if (this.recipesSection) {
+        this.recipesSection.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
+    }, 0);
+  }
 
   fetchRecipePreparation(recipeId: number) {
     this.isFetchingPreparation[recipeId] = true;

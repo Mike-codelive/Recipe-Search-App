@@ -1,4 +1,4 @@
-<section class="masonry-container">
+<section #recipesSection class="masonry-container">
   @if (recipeChunks()) { @for (chunk of recipeChunks(); track $index) {
   <div class="recipe-column">
     @for (recipe of chunk; track recipe.id) {
