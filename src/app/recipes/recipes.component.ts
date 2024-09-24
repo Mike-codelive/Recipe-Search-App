@@ -26,7 +26,7 @@ export class RecipesComponent implements AfterViewInit, OnInit {
   private recipeService = inject(RecipeService);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
-  private injector = inject(Injector); // Inject the Injector
+  private injector = inject(Injector);
 
   @ViewChild('recipesSection') recipesSection!: ElementRef;
 
