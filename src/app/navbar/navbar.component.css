@@ -1,0 +1,13 @@
+section {
+  top: 2.5rem;
+  position: sticky;
+  width: 100%;
+}
+
+img {
+  height: 2.5rem;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
+}
