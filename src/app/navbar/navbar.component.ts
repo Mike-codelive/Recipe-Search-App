@@ -1,14 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { LoginComponent } from '../credentials/login/login.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [],
+  imports: [LoginComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  onLogin() {
-    console.log('hello login btn');
+  isCredentialOpen = signal(true);
+
+  onCredentials() {
+    // console.log('hello login btn');
+    this.isCredentialOpen.set(true);
+  }
+
+  onCloseCredentials() {
+    this.isCredentialOpen.set(false);
   }
 }

@@ -394,6 +394,23 @@ template {
   text-align: center;
 }
 
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.full-screen {
+  height: 100%;
+  width: 100%;
+}
+
 .my-1 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -426,22 +443,41 @@ template {
   width: 48px;
 }
 
-.spinner div {
-  width: 16px;
-  height: 16px;
-  background: rgb(255 255 255);
-  border-radius: 50%;
-  display: inline-block;
-  animation: bounce 1.4s infinite ease-in-out both;
+.close-btn {
+  width: 1rem;
+  right: -0.5rem;
+  top: -1.5rem;
+  cursor: pointer;
+  filter: var(--red-filter);
+}
+
+.btn-link {
+  color: var(--primary-link-color);
+  padding: 0;
+}
+
+.btn-submit {
+  background-color: var(--green-submit-btn);
+  color: var(--rf-white);
+  border-radius: 1rem;
 }
 
 button {
-  background-color: rgb(255 255 255);
+  background-color: var(--rf-white);
   border-radius: 20px;
   padding: 10px;
   font-weight: bolder;
   border: 0;
   cursor: pointer;
+}
+
+.spinner div {
+  width: 16px;
+  height: 16px;
+  background: var(--rf-white);
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce 1.4s infinite ease-in-out both;
 }
 
 @keyframes bounce {
@@ -490,4 +526,14 @@ button {
   .container {
     max-width: 950px;
   }
+}
+
+:root {
+  --primary-link-color: rgb(1, 107, 248);
+  --red-filter: brightness(0) saturate(100%) invert(74%) sepia(88%)
+    saturate(6532%) hue-rotate(338deg) brightness(89%) contrast(103%);
+  --green-filter: brightness(0) saturate(100%) invert(85%) sepia(86%)
+    saturate(1577%) hue-rotate(130deg) brightness(95%) contrast(89%);
+  --green-submit-btn: rgb(0, 104, 74);
+  --rf-white: rgb(255, 255, 255);
 }

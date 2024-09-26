@@ -1,5 +1,9 @@
 <section>
   <div class="flex w-full justify-end">
-    <img (click)="onLogin()" src="assets/chef-hat.svg" alt="Profile" />
+    <img (click)="onCredentials()" src="assets/chef-hat.svg" alt="Profile" />
   </div>
 </section>
+
+@if (isCredentialOpen()) {
+<app-login (closeCredentials)="onCloseCredentials()" />
+}
