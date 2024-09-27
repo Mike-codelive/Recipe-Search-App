@@ -537,3 +537,12 @@ button {
   --green-submit-btn: rgb(0, 104, 74);
   --rf-white: rgb(255, 255, 255);
 }
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
