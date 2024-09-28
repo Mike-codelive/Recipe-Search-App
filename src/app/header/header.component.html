@@ -2,6 +2,7 @@
   <div class="hero-container">
     <div class="hero-img">
       <img
+        class="hero_img"
         src="assets/hero-main-recipe-finder.svg"
         alt="Main recipe finder app logo"
       />
@@ -11,24 +12,33 @@
       <h2>don't know what to eat? search by ingredients</h2>
       <div class="hero-form">
         <form (ngSubmit)="submitIngredients()">
-          <div>
-            <label for="ingredients"></label>
-            <input
-              type="text"
-              id="ingredients"
-              name="ingredients"
-              placeholder="example... beef Garlic"
-              [(ngModel)]="enteredIngredients"
-            />
+          <div class="flex items-center">
+            <mat-form-field class="mat-input">
+              <mat-label>Enter Ingredients</mat-label>
+              <input
+                matInput
+                placeholder="Ex. Beef Garlic"
+                type="text"
+                id="ingredients"
+                name="ingredients"
+                [(ngModel)]="enteredIngredients"
+              />
+            </mat-form-field>
           </div>
-          <div>
-            <button type="submit">search</button>
+          <div class="flex items-center">
+            <button mat-raised-button color="primary" type="submit">
+              search
+            </button>
           </div>
           <div class="spinner flex items-center">
             @if (isFetching()) {
-            <div></div>
-            <div></div>
-            <div></div>
+
+            <img
+              class="recipes_loader"
+              src="assets/loading-state.svg"
+              alt="loading..."
+            />
+
             }
           </div>
         </form>

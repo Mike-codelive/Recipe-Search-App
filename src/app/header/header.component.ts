@@ -6,12 +6,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../services/recipe.service';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 const apiUrl = ApiUrl.apiUrl;
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, MatButtonModule, MatInputModule, MatFormFieldModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

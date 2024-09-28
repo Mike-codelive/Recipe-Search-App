@@ -480,6 +480,28 @@ button {
   animation: bounce 1.4s infinite ease-in-out both;
 }
 
+.mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.recipes_loader {
+  width: 4rem;
+  height: 4rem;
+}
+
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.recipes_loader {
+  animation: rotate360 2s linear infinite;
+}
+
 @keyframes bounce {
   0%,
   80%,
@@ -529,6 +551,7 @@ button {
 }
 
 :root {
+  --mat-app-primary: #00b0ff;
   --primary-link-color: rgb(1, 107, 248);
   --red-filter: brightness(0) saturate(100%) invert(74%) sepia(88%)
     saturate(6532%) hue-rotate(338deg) brightness(89%) contrast(103%);

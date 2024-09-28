@@ -12,13 +12,14 @@ import {
 import { RecipeService } from '../services/recipe.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiUrl } from '../../enviroments/environment';
-import { runInInjectionContext, signal, effect } from '@angular/core';
+import { runInInjectionContext, effect } from '@angular/core';
 
 const apiUrl = ApiUrl.apiUrl;
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
+  imports: [],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })
