@@ -41,10 +41,10 @@ main {
    * `article` contexts in Chrome, Firefox, and Safari.
    */
 
-h1 {
+/* h1 {
   font-size: 2em;
   margin: 0.67em 0;
-}
+} */
 
 /* Grouping content
      ========================================================================== */
@@ -429,6 +429,10 @@ template {
   margin-bottom: 1.5rem;
 }
 
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
 .ml-1-5 {
   margin-left: 1.5rem;
 }
@@ -568,4 +572,17 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-typography h1 {
+  font-size: 2.5rem;
+}
+
+.mat-typography h2 {
+  font-size: 1.5rem;
+}
+
+.mx-1-5 {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
 }

@@ -8,8 +8,7 @@
         [src]="recipe.image ? recipe.image : 'assets/demo-recipe.svg'"
         [alt]="recipe.title"
       />
-      <h1 class="text-center ml-1-5 mr-1-5">{{ recipe.title }}</h1>
-      <h2 class="text-center mb-1-5">Ingredients</h2>
+      <h1 class="text-center mx-1-5 mb-2">{{ recipe.title }}</h1>
       <div class="flex flex-col space-around">
         <ol class="w-full ml-1-5 mr-1-5">
           @for (usedIngredient of recipe.usedIngredients; track $index) {
