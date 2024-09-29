@@ -6,9 +6,10 @@ section {
 }
 
 img {
-  height: 2.5rem;
+  height: 2rem;
   cursor: pointer;
-  background-color: white;
+  background-color: transparent;
   border-radius: 50%;
   padding: 0.5rem;
+  filter: var(--nav-btn-color);
 }

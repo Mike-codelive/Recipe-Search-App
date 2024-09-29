@@ -10,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent {
-  isCredentialOpen = signal(false);
+  isCredentialOpen = signal(true);
 
   onCredentials() {
     this.isCredentialOpen.set(true);

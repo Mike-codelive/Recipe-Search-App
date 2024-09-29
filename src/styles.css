@@ -450,7 +450,7 @@ template {
 .close-btn {
   width: 1rem;
   right: -0.5rem;
-  top: -1.5rem;
+  top: -0.5rem;
   cursor: pointer;
   filter: var(--red-filter);
 }
@@ -557,6 +557,8 @@ button {
 :root {
   --mat-app-primary: #00b0ff;
   --primary-link-color: rgb(1, 107, 248);
+  --nav-btn-color: invert(22%) sepia(89%) saturate(2257%) hue-rotate(198deg)
+    brightness(91%) contrast(101%);
   --red-filter: brightness(0) saturate(100%) invert(74%) sepia(88%)
     saturate(6532%) hue-rotate(338deg) brightness(89%) contrast(103%);
   --green-filter: brightness(0) saturate(100%) invert(85%) sepia(86%)
