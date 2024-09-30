@@ -588,3 +588,12 @@ body {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
 }
+
+.form-inputs {
+  gap: 1.5rem;
+}
+
+.validator-container {
+  height: 24px;
+  color: red;
+}

@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 
 import { RegisterComponent } from '../register/register.component';
+import { FormValidationService } from '../../services/form-validation.service';
 
 @Component({
   selector: 'app-login',
@@ -40,20 +41,14 @@ export class LoginComponent {
     }),
   });
 
+  constructor(private validationService: FormValidationService) {}
+
   get emailIsInvalid() {
-    return (
-      this.form.controls.email.touched &&
-      this.form.controls.email.dirty &&
-      this.form.controls.email.invalid
-    );
+    return this.validationService.isControlInvalid(this.form.controls.email);
   }
 
   get passwordIsInvalid() {
-    return (
-      this.form.controls.password.touched &&
-      this.form.controls.password.dirty &&
-      this.form.controls.password.invalid
-    );
+    return this.validationService.isControlInvalid(this.form.controls.password);
   }
 
   onSubmit() {
