@@ -79,13 +79,14 @@ export class LoginComponent {
     const { email, password } = this.form.value;
 
     const subscription = this.httpClient
-      .post<{ users: User[] }>(`${apiUrl}login`, {
+      .post<{ token: string }>(`${apiUrl}login`, {
         email,
         password,
       })
       .subscribe({
         next: (resData) => {
-          console.log(resData);
+          this.saveToken(resData.token);
+          // console.log(resData.token);
         },
         error: (e) => {
           this.isLogin.set(false);
@@ -97,12 +98,17 @@ export class LoginComponent {
         },
         complete: () => {
           this.isLogin.set(false);
+          this.close();
         },
       });
 
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
     });
+  }
+
+  saveToken(token: string) {
+    localStorage.setItem('token', token);
   }
 
   close() {
