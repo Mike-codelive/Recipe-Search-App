@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Output,
+  signal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -13,6 +20,12 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { RegisterComponent } from '../register/register.component';
 import { FormValidationService } from '../../services/form-validation.service';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../../user.model';
+import { ApiUrl } from '../../../enviroments/environment';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+const apiUrl = ApiUrl.apiUrl;
 
 @Component({
   selector: 'app-login',
@@ -24,11 +37,16 @@ import { FormValidationService } from '../../services/form-validation.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  private httpClient = inject(HttpClient);
+  private destroyRef = inject(DestroyRef);
+  isLogin = signal(false);
+
   @Output() closeCredentials = new EventEmitter<void>();
   openRegister = signal(false);
 
@@ -51,14 +69,40 @@ export class LoginComponent {
     return this.validationService.isControlInvalid(this.form.controls.password);
   }
 
-  onSubmit() {
+  onLogin() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    const email = this.form.value.email;
-    const password = this.form.value.password;
-    console.log(email, password);
+
+    this.isLogin.set(true);
+    const { email, password } = this.form.value;
+
+    const subscription = this.httpClient
+      .post<{ users: User[] }>(`${apiUrl}login`, {
+        email,
+        password,
+      })
+      .subscribe({
+        next: (resData) => {
+          console.log(resData);
+        },
+        error: (e) => {
+          this.isLogin.set(false);
+          if (e.status === 401) {
+            this.form.setErrors({ invalidCredentials: true });
+            this.form.controls.email.setErrors({ invalid: true });
+            this.form.controls.password.setErrors({ invalid: true });
+          }
+        },
+        complete: () => {
+          this.isLogin.set(false);
+        },
+      });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 
   close() {
