@@ -21,7 +21,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { RegisterComponent } from '../register/register.component';
 import { FormValidationService } from '../../services/form-validation.service';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../user.model';
 import { ApiUrl } from '../../../enviroments/environment';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 

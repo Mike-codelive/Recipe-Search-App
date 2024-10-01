@@ -13,13 +13,15 @@ import { RecipeService } from '../services/recipe.service';
 import { HttpClient } from '@angular/common/http';
 import { ApiUrl } from '../../enviroments/environment';
 import { runInInjectionContext, effect } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 
 const apiUrl = ApiUrl.apiUrl;
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [],
+  imports: [MatProgressSpinnerModule, MatButtonModule],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })

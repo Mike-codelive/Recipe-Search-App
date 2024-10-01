@@ -75,3 +75,7 @@ li {
 .button {
   max-width: 200px;
 }
+
+.recipe-spinner {
+  height: 48px;
+}

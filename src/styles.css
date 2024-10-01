@@ -532,6 +532,10 @@ button {
   margin-left: auto;
 }
 
+#recipe-instructions {
+  font-size: 1rem;
+}
+
 .recipe-instructions li {
   margin-bottom: 0.8rem;
 }
