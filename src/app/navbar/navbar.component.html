@@ -1,12 +1,27 @@
 <section>
   <div class="flex w-full justify-end">
+    @if (userData()) {
+    <img
+      mat-button
+      [matMenuTriggerFor]="menu"
+      mat-raised-button
+      matTooltip="Profile"
+      src="assets/logged-in-profile.svg"
+      alt="Profile"
+    />
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Saved Recipes</button>
+      <button mat-menu-item (click)="onLogOut()">Log-Out</button>
+    </mat-menu>
+    } @else {
     <img
       (click)="onCredentials()"
       mat-raised-button
       matTooltip="Log-In \ Register"
       src="assets/chef-hat.svg"
-      alt="Profile"
+      alt="Log-In / Register"
     />
+    }
   </div>
 </section>
 

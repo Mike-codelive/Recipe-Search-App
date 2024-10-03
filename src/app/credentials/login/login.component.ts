@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth.service';
 import {
   Component,
   DestroyRef,
@@ -17,6 +18,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { RegisterComponent } from '../register/register.component';
 import { FormValidationService } from '../../services/form-validation.service';
@@ -42,8 +44,10 @@ const apiUrl = ApiUrl.apiUrl;
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  private authService = inject(AuthService);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
+  private snackBar = inject(MatSnackBar);
   isLogin = signal(false);
 
   @Output() closeCredentials = new EventEmitter<void>();
@@ -84,7 +88,7 @@ export class LoginComponent {
       })
       .subscribe({
         next: (resData) => {
-          this.saveToken(resData.token);
+          this.authService.saveToken(resData.token);
           // console.log(resData.token);
         },
         error: (e) => {
@@ -96,8 +100,12 @@ export class LoginComponent {
           }
         },
         complete: () => {
+          this.authService.onLogIn();
           this.isLogin.set(false);
           this.close();
+          this.snackBar.open('Log-in successfully!', 'Close', {
+            duration: 5000,
+          });
         },
       });
 
