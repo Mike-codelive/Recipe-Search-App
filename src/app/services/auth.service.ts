@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { ApiUrl } from '../../enviroments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { UserData } from '../user.model';
 
 const apiUrl = ApiUrl.apiUrl;
 
@@ -11,11 +11,9 @@ const apiUrl = ApiUrl.apiUrl;
 })
 export class AuthService {
   private httpClient = inject(HttpClient);
+  userData = signal<UserData | null>(null);
 
   private tokenKey = 'token';
-
-  // userDataSubject = new BehaviorSubject<string | null>(null);
-  // userData$ = this.userDataSubject.asObservable();
 
   onLogIn() {
     if (this.isLoggedIn()) {
@@ -27,13 +25,17 @@ export class AuthService {
       this.httpClient.get(`${apiUrl}/users`).subscribe({
         next: (res: any) => {
           this.saveCredentials(res.userData);
-          // this.userDataSubject.next(res.userData);
+          this.userData.set(res.userData);
         },
         error: (err) => {
           console.error('Failed to fetch user data', err);
         },
       });
     }
+  }
+
+  getUserData() {
+    return this.userData;
   }
 
   saveCredentials(profile: any) {

@@ -89,7 +89,6 @@ export class LoginComponent {
       .subscribe({
         next: (resData) => {
           this.authService.saveToken(resData.token);
-          // console.log(resData.token);
         },
         error: (e) => {
           this.isLogin.set(false);

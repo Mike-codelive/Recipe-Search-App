@@ -2,10 +2,11 @@
   <div class="flex w-full justify-end">
     @if (userData()) {
     <img
+      class="btn-profile"
       mat-button
       [matMenuTriggerFor]="menu"
       mat-raised-button
-      matTooltip="Profile"
+      [matTooltip]="userData()?.username"
       src="assets/logged-in-profile.svg"
       alt="Profile"
     />
@@ -16,6 +17,7 @@
     } @else {
     <img
       (click)="onCredentials()"
+      class="btn-login-register"
       mat-raised-button
       matTooltip="Log-In \ Register"
       src="assets/chef-hat.svg"

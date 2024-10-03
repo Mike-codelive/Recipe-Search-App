@@ -11,5 +11,12 @@ img {
   background-color: transparent;
   border-radius: 50%;
   padding: 0.5rem;
+}
+
+.btn-login-register {
   filter: var(--nav-btn-color);
+}
+
+.btn-profile {
+  height: 3rem;
 }
