@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { ApiUrl } from '../../enviroments/environment';
 import { UserData } from '../user.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const apiUrl = ApiUrl.apiUrl;
 
@@ -14,6 +15,8 @@ export class AuthService {
   userData = signal<UserData | null>(null);
 
   private tokenKey = 'token';
+
+  constructor(private snackBar: MatSnackBar) {}
 
   onLogIn() {
     if (this.isLoggedIn()) {
@@ -31,6 +34,26 @@ export class AuthService {
           console.error('Failed to fetch user data', err);
         },
       });
+      this.setAutoLogout();
+    }
+  }
+
+  setAutoLogout() {
+    const token = this.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      const expirationTime = decoded.exp * 1000;
+      const timeout = expirationTime - Date.now();
+
+      if (timeout > 0) {
+        setTimeout(() => {
+          this.logout();
+          this.userData.set(null);
+        }, timeout);
+      } else {
+        this.logout();
+        this.userData.set(null);
+      }
     }
   }
 
@@ -71,6 +94,10 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('credentials');
+    this.userData.set(null);
+    this.snackBar.open('Session expired!', 'Close', {
+      duration: 5000,
+    });
   }
 
   retrieveCredentials() {
