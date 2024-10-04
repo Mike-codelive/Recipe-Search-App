@@ -460,6 +460,10 @@ template {
   padding: 0;
 }
 
+.btn-register {
+  height: 48px;
+}
+
 .btn-submit {
   background-color: var(--green-submit-btn);
   color: var(--rf-white);

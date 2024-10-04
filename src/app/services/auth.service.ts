@@ -28,7 +28,7 @@ export class AuthService {
       this.httpClient.get(`${apiUrl}/users`).subscribe({
         next: (res: any) => {
           this.saveCredentials(res.userData);
-          this.userData.set(res.userData);
+          this.setUserData(res.userData);
         },
         error: (err) => {
           console.error('Failed to fetch user data', err);
@@ -55,6 +55,11 @@ export class AuthService {
         this.userData.set(null);
       }
     }
+  }
+
+  setUserData(userCredentials: any) {
+    this.saveCredentials(userCredentials);
+    return this.userData.set(userCredentials);
   }
 
   getUserData() {
