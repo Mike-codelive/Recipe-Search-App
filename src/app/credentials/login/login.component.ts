@@ -19,6 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 import { RegisterComponent } from '../register/register.component';
 import { FormValidationService } from '../../services/form-validation.service';
@@ -39,6 +40,7 @@ const apiUrl = ApiUrl.apiUrl;
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -52,6 +54,12 @@ export class LoginComponent {
 
   @Output() closeCredentials = new EventEmitter<void>();
   openRegister = signal(false);
+
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   form = new FormGroup({
     email: new FormControl('', {

@@ -96,13 +96,19 @@ export class AuthService {
     return true;
   }
 
-  logout(): void {
+  logout(camefrom: boolean = false): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem('credentials');
     this.userData.set(null);
-    this.snackBar.open('Session expired!', 'Close', {
-      duration: 5000,
-    });
+    if (camefrom) {
+      this.snackBar.open('Session closed', 'Close', {
+        duration: 3500,
+      });
+    } else {
+      this.snackBar.open('Session expired!', 'Close', {
+        duration: 3500,
+      });
+    }
   }
 
   retrieveCredentials() {

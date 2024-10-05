@@ -529,7 +529,7 @@ button {
 }
 
 .container {
-  width: 100%;
+  /* width: 100%; */
   padding-right: calc(1.5rem * 0.5);
   padding-left: calc(1.5rem * 0.5);
   margin-right: auto;

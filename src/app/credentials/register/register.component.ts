@@ -21,6 +21,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ApiUrl } from '../../../enviroments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 
 const apiUrl = ApiUrl.apiUrl;
 
@@ -34,6 +35,7 @@ const apiUrl = ApiUrl.apiUrl;
     MatInputModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
@@ -44,6 +46,12 @@ export class RegisterComponent {
 
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
+
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   isRegister = signal(false);
 

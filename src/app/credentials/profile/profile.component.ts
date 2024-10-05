@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { ApiUrl } from '../../../enviroments/environment';
 import { FormValidationService } from '../../services/form-validation.service';
 
@@ -37,6 +38,7 @@ const apiUrl = ApiUrl.apiUrl;
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -50,13 +52,15 @@ export class ProfileComponent {
 
   constructor(private validationService: FormValidationService) {}
 
-  // userData: any;
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   isProfileEdited = signal(false);
 
   ngOnInit() {
-    // this.userData = this.authService.userData();
-
     const userData = this.authService.userData();
     if (userData) {
       this.editProfile.patchValue({

@@ -5,12 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 
-import {
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ProfileComponent } from '../credentials/profile/profile.component';
 
 @Component({
@@ -29,9 +24,10 @@ import { ProfileComponent } from '../credentials/profile/profile.component';
 export class NavbarComponent implements OnInit {
   private authService = inject(AuthService);
   readonly dialog = inject(MatDialog);
-  userData = this.authService.getUserData();
-
   readonly menuTrigger = viewChild.required(MatMenuTrigger);
+  readonly cameFromNavbar = signal(true);
+
+  userData = this.authService.getUserData();
 
   isCredentialOpen = signal(false);
 
@@ -40,8 +36,6 @@ export class NavbarComponent implements OnInit {
       restoreFocus: false,
     });
 
-    // Manually restore focus to the menu trigger since the element that
-    // opens the dialog won't be in the DOM any more when the dialog closes.
     dialogRef.afterClosed().subscribe(() => this.menuTrigger().focus());
   }
 
@@ -52,7 +46,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogOut() {
-    this.authService.logout();
+    this.authService.logout(this.cameFromNavbar());
     this.userData.set(null);
   }
 
