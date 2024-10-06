@@ -114,4 +114,21 @@ export class AuthService {
   retrieveCredentials() {
     return localStorage.getItem('credentials') || '';
   }
+
+  saveFavoriteRecipe(recipe: any) {
+    const recipeToSend = {
+      title: recipe.title,
+      extendedIngredients: recipe.extendedIngredients.map(
+        (ingredient: { name: string }) => ({
+          name: ingredient.name,
+        })
+      ),
+      instructions: recipe.instructions,
+    };
+    return this.httpClient.post(`${apiUrl}recipes/save`, recipeToSend);
+  }
+
+  removeFavoriteRecipe(recipeId: string) {
+    return this.httpClient.delete(`${apiUrl}recipes/user${recipeId}`);
+  }
 }

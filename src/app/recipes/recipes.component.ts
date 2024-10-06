@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import {
   Component,
   computed,
@@ -8,6 +9,7 @@ import {
   ElementRef,
   Injector,
   OnInit,
+  signal,
 } from '@angular/core';
 import { RecipeService } from '../services/recipe.service';
 import { HttpClient } from '@angular/common/http';
@@ -15,21 +17,34 @@ import { ApiUrl } from '../../enviroments/environment';
 import { runInInjectionContext, effect } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const apiUrl = ApiUrl.apiUrl;
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [MatProgressSpinnerModule, MatButtonModule],
+  imports: [
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    CommonModule,
+    MatTooltipModule,
+  ],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })
 export class RecipesComponent implements AfterViewInit, OnInit {
+  authService = inject(AuthService);
   private recipeService = inject(RecipeService);
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
   private injector = inject(Injector);
+  private snackBar = inject(MatSnackBar);
+  isFavorited = signal(false);
 
   @ViewChild('recipesSection') recipesSection!: ElementRef;
 
@@ -61,22 +76,53 @@ export class RecipesComponent implements AfterViewInit, OnInit {
     }, 0);
   }
 
-  fetchRecipePreparation(recipeId: number) {
-    this.isFetchingPreparation[recipeId] = true;
+  async toggleFavoriteRecipe(recipeId: number) {
+    try {
+      const fullRecipe = await this.fetchRecipePreparation(recipeId, false);
+      console.log(fullRecipe);
+      if (true) {
+        this.authService.saveFavoriteRecipe(fullRecipe).subscribe({
+          next: () => {
+            this.snackBar.open('Recipe saved!', 'Close', { duration: 1500 });
+          },
+          error: () => {
+            this.isFavorited.set(false);
+          },
+        });
+      } else {
+        // this.authService.removeFavoriteRecipe(recipeId).subscribe();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    const subscription = this.httpClient
-      .get<{ instructions: string }>(`${apiUrl}search/${recipeId}`)
-      .subscribe({
-        next: (recipeDet) => {
-          this.recipePreparation[recipeId] = recipeDet.instructions;
-        },
-        complete: () => {
-          this.isFetchingPreparation[recipeId] = false;
-        },
+  fetchRecipePreparation(
+    recipeId: number,
+    fetchedFromBtn: boolean = true
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.isFetchingPreparation[recipeId] = true;
+
+      const subscription = this.httpClient
+        .get<{ instructions: string }>(`${apiUrl}search/${recipeId}`)
+        .subscribe({
+          next: (recipeDet: any) => {
+            this.isFetchingPreparation[recipeId] = false;
+            if (fetchedFromBtn) {
+              this.recipePreparation[recipeId] = recipeDet.instructions;
+            }
+            resolve(recipeDet);
+          },
+          error: (err) => {
+            this.isFetchingPreparation[recipeId] = false;
+            reject(err);
+          },
+        });
+
+      this.destroyRef.onDestroy(() => {
+        subscription.unsubscribe();
       });
-
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
     });
   }
 

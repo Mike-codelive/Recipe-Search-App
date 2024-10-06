@@ -79,3 +79,20 @@ li {
 .recipe-spinner {
   height: 48px;
 }
+
+.favorite-icon {
+  top: 1rem;
+  right: 1rem;
+  background-color: black;
+  border-radius: 7px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.filled-heart {
+  color: red;
+}
+
+.empty-heart {
+  color: grey;
+}
