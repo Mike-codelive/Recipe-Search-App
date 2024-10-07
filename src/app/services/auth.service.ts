@@ -13,6 +13,7 @@ const apiUrl = ApiUrl.apiUrl;
 export class AuthService {
   private httpClient = inject(HttpClient);
   userData = signal<UserData | null>(null);
+  favoriteRecipes: number[] = [];
 
   private tokenKey = 'token';
 
@@ -70,6 +71,10 @@ export class AuthService {
     localStorage.setItem('credentials', JSON.stringify(profile));
   }
 
+  saveRecipes(recipes: any) {
+    localStorage.setItem('recipes', recipes);
+  }
+
   saveToken(token: string) {
     localStorage.setItem('token', token);
   }
@@ -82,6 +87,14 @@ export class AuthService {
     const decoded: any = jwtDecode(token);
     const expirationTime = decoded.exp * 1000;
     return Date.now() >= expirationTime;
+  }
+
+  addFavoriteRecipe(recipeId: number) {
+    this.favoriteRecipes.push(recipeId);
+  }
+
+  removeFavoriteRecipe(recipeId: number) {
+    this.favoriteRecipes = this.favoriteRecipes.filter((id) => id !== recipeId);
   }
 
   isLoggedIn() {
@@ -117,6 +130,7 @@ export class AuthService {
 
   saveFavoriteRecipe(recipe: any) {
     const recipeToSend = {
+      id: recipe.id,
       title: recipe.title,
       extendedIngredients: recipe.extendedIngredients.map(
         (ingredient: { name: string }) => ({
@@ -125,10 +139,32 @@ export class AuthService {
       ),
       instructions: recipe.instructions,
     };
+
+    this.addFavoriteRecipe(recipe.id);
+    this.snackBar.open('Recipe added to favorites', 'Close', {
+      duration: 1500,
+    });
     return this.httpClient.post(`${apiUrl}recipes/save`, recipeToSend);
   }
 
-  removeFavoriteRecipe(recipeId: string) {
-    return this.httpClient.delete(`${apiUrl}recipes/user${recipeId}`);
+  deleteFavoriteRecipe(recipeId: number) {
+    this.httpClient.delete(`${apiUrl}/recipes/user/${recipeId}`).subscribe({
+      next: () => {
+        this.removeFavoriteRecipe(recipeId);
+        this.snackBar.open('Recipe removed from favorites', 'Close', {
+          duration: 1500,
+        });
+      },
+      error: (err) => {
+        console.error('Error removing favorite', err);
+        this.snackBar.open('Error removing recipe', 'Close', {
+          duration: 1500,
+        });
+      },
+    });
+  }
+
+  getFavoriteRecipes() {
+    return this.httpClient.get<any>(`${apiUrl}recipes/user`);
   }
 }

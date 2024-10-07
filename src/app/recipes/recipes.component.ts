@@ -20,7 +20,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 const apiUrl = ApiUrl.apiUrl;
 
@@ -43,8 +42,6 @@ export class RecipesComponent implements AfterViewInit, OnInit {
   private httpClient = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
   private injector = inject(Injector);
-  private snackBar = inject(MatSnackBar);
-  isFavorited = signal(false);
 
   @ViewChild('recipesSection') recipesSection!: ElementRef;
 
@@ -52,8 +49,20 @@ export class RecipesComponent implements AfterViewInit, OnInit {
 
   isFetchingPreparation: { [recipeId: number]: boolean } = {};
   recipePreparation: { [recipeId: number]: string | undefined } = {};
+  isFavoritedMap = new Map<number, boolean>();
 
   ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getFavoriteRecipes().subscribe({
+        next: (response) => {
+          this.populateFavorites(response.favorites);
+        },
+        error: (err) => {
+          console.error('Error fetching favorite recipes:', err);
+        },
+      });
+    }
+
     runInInjectionContext(this.injector, () => {
       effect(() => {
         const recipeData = this.recipes();
@@ -76,24 +85,39 @@ export class RecipesComponent implements AfterViewInit, OnInit {
     }, 0);
   }
 
-  async toggleFavoriteRecipe(recipeId: number) {
-    try {
-      const fullRecipe = await this.fetchRecipePreparation(recipeId, false);
-      console.log(fullRecipe);
-      if (true) {
-        this.authService.saveFavoriteRecipe(fullRecipe).subscribe({
-          next: () => {
-            this.snackBar.open('Recipe saved!', 'Close', { duration: 1500 });
-          },
-          error: () => {
-            this.isFavorited.set(false);
-          },
-        });
-      } else {
-        // this.authService.removeFavoriteRecipe(recipeId).subscribe();
-      }
-    } catch (error) {
-      console.log(error);
+  populateFavorites(favorites: any[]): void {
+    this.authService.favoriteRecipes = favorites.map(
+      (favorite: any) => favorite.recipe.id
+    );
+
+    favorites.forEach((favorite: any) => {
+      this.isFavoritedMap.set(favorite.recipe.id, true);
+    });
+  }
+
+  isFavorited(recipeId: number): boolean {
+    return this.isFavoritedMap.get(recipeId) || false;
+  }
+
+  async toggleFavoriteRecipe(recipe: any) {
+    const isFavorited = this.authService.favoriteRecipes.includes(
+      Number(recipe)
+    );
+
+    if (isFavorited) {
+      this.authService.deleteFavoriteRecipe(recipe);
+      this.isFavoritedMap.set(recipe, false);
+    } else {
+      const fullRecipe = await this.fetchRecipePreparation(recipe, false);
+
+      this.authService.saveFavoriteRecipe(fullRecipe).subscribe({
+        next: () => {
+          this.isFavoritedMap.set(recipe, true);
+        },
+        error: (err) => {
+          console.error('Error saving favorite recipe:', err);
+        },
+      });
     }
   }
 
