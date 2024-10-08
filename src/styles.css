@@ -605,3 +605,80 @@ body {
   height: 24px;
   color: red;
 }
+
+.masonry-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.match-ingredients {
+  height: 1.5rem;
+  filter: var(--green-filter);
+}
+
+.ingredients {
+  height: 1.5rem;
+}
+
+.recipe {
+  background-color: #212121;
+  border-radius: 1rem;
+  transition: background-color, 0.3s;
+  min-width: 400px;
+}
+
+.recipe:hover {
+  background-color: #212121c9;
+}
+
+.recipe-img {
+  object-fit: cover;
+  width: 100%;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.recipe-column {
+  flex: 1;
+}
+
+@media (min-width: 500px) {
+  .recipe {
+    min-width: fit-content;
+  }
+
+  .recipe-img {
+    max-height: 231px;
+  }
+}
+
+@media (min-width: 768px) {
+  .recipes-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .recipes-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.favorite-icon {
+  top: 1rem;
+  right: 1rem;
+  background-color: black;
+  border-radius: 7px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.filled-heart {
+  color: red;
+}
+
+.empty-heart {
+  color: grey;
+}

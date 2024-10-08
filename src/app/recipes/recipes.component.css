@@ -1,13 +1,13 @@
-.match-ingredients {
+/* .match-ingredients {
   height: 1.5rem;
   filter: var(--green-filter);
-}
+} */
 
 .missed-ingredients {
   filter: var(--red-filter);
 }
 
-.recipe {
+/* .recipe {
   background-color: #212121;
   border-radius: 1rem;
   transition: background-color, 0.3s;
@@ -23,11 +23,11 @@
   width: 100%;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
-}
+} */
 
-.ingredients {
+/* .ingredients {
   height: 1.5rem;
-}
+} */
 
 ol {
   padding-left: 1rem;
@@ -39,7 +39,7 @@ li {
   margin-bottom: 0.5rem;
 }
 
-@media (min-width: 500px) {
+/* @media (min-width: 500px) {
   .recipe {
     min-width: fit-content;
   }
@@ -59,18 +59,18 @@ li {
   .recipes-container {
     grid-template-columns: repeat(3, 1fr);
   }
-}
+} */
 
-.masonry-container {
+/* .masonry-container {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   flex-wrap: wrap;
-}
+} */
 
-.recipe-column {
+/* .recipe-column {
   flex: 1;
-}
+} */
 
 .button {
   max-width: 200px;
@@ -80,7 +80,7 @@ li {
   height: 48px;
 }
 
-.favorite-icon {
+/* .favorite-icon {
   top: 1rem;
   right: 1rem;
   background-color: black;
@@ -95,4 +95,4 @@ li {
 
 .empty-heart {
   color: grey;
-}
+} */

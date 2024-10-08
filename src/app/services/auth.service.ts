@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { ApiUrl } from '../../enviroments/environment';
 import { UserData } from '../user.model';
@@ -13,7 +13,9 @@ const apiUrl = ApiUrl.apiUrl;
 export class AuthService {
   private httpClient = inject(HttpClient);
   userData = signal<UserData | null>(null);
-  favoriteRecipes: number[] = [];
+  // favoriteRecipes: number[] = [];
+  favoriteRecipes = signal<any[]>([]);
+  isFavoritedMap = new Map<number, boolean>();
 
   private tokenKey = 'token';
 
@@ -90,11 +92,15 @@ export class AuthService {
   }
 
   addFavoriteRecipe(recipeId: number) {
-    this.favoriteRecipes.push(recipeId);
+    const updatedRecipes = [...this.favoriteRecipes(), recipeId];
+    this.favoriteRecipes.set(updatedRecipes);
   }
 
   removeFavoriteRecipe(recipeId: number) {
-    this.favoriteRecipes = this.favoriteRecipes.filter((id) => id !== recipeId);
+    const updatedRecipes = this.favoriteRecipes().filter(
+      (id) => id !== recipeId
+    );
+    this.favoriteRecipes.set(updatedRecipes);
   }
 
   isLoggedIn() {
@@ -132,6 +138,7 @@ export class AuthService {
     const recipeToSend = {
       id: recipe.id,
       title: recipe.title,
+      image: recipe.image,
       extendedIngredients: recipe.extendedIngredients.map(
         (ingredient: { name: string }) => ({
           name: ingredient.name,
@@ -167,4 +174,78 @@ export class AuthService {
   getFavoriteRecipes() {
     return this.httpClient.get<any>(`${apiUrl}recipes/user`);
   }
+
+  // migrating reusable services
+
+  populateFavorites(favorites: any[]): void {
+    // this.favoriteRecipes = favorites.map((favorite: any) => favorite.recipe.id);
+
+    const recipeFavoriteIds = favorites.map(
+      (favorite: any) => favorite.recipe.id
+    );
+
+    this.favoriteRecipes.set(recipeFavoriteIds);
+
+    favorites.forEach((favorite: any) => {
+      this.isFavoritedMap.set(favorite.recipe.id, true);
+    });
+  }
+
+  isFavorited(recipeId: number): boolean {
+    return this.isFavoritedMap.get(recipeId) || false;
+  }
+
+  async toggleFavoriteRecipe(recipe: any) {
+    const isFavorited = this.favoriteRecipes().includes(recipe);
+
+    if (isFavorited) {
+      this.deleteFavoriteRecipe(recipe);
+      this.isFavoritedMap.set(recipe, false);
+    } else {
+      const fullRecipe = await this.fetchRecipePreparation(recipe, false);
+
+      this.saveFavoriteRecipe(fullRecipe).subscribe({
+        next: () => {
+          this.isFavoritedMap.set(recipe, true);
+        },
+        error: (err) => {
+          console.error('Error saving favorite recipe:', err);
+        },
+      });
+    }
+  }
+
+  fetchRecipePreparation(
+    recipeId: number,
+    fetchedFromBtn: boolean = true
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.isFetchingPreparation[recipeId] = true;
+
+      const subscription = this.httpClient
+        .get<{ instructions: string }>(`${apiUrl}search/${recipeId}`)
+        .subscribe({
+          next: (recipeDet: any) => {
+            this.isFetchingPreparation[recipeId] = false;
+            if (fetchedFromBtn) {
+              this.recipePreparation[recipeId] = recipeDet.instructions;
+            }
+            resolve(recipeDet);
+          },
+          error: (err) => {
+            this.isFetchingPreparation[recipeId] = false;
+            reject(err);
+          },
+        });
+
+      this.destroyRef.onDestroy(() => {
+        subscription.unsubscribe();
+      });
+    });
+  }
+
+  isFetchingPreparation: { [recipeId: number]: boolean } = {};
+  recipePreparation: { [recipeId: number]: string | undefined } = {};
+
+  private destroyRef = inject(DestroyRef);
 }

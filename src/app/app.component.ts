@@ -3,6 +3,7 @@ import { HeaderComponent } from './header/header.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 // import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -13,6 +14,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     RecipesComponent,
     FooterComponent,
     NavbarComponent,
+    FavoritesComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

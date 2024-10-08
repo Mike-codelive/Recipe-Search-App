@@ -1,0 +1,65 @@
+<h1 class="text-center">Favorite Recipes</h1>
+<section class="masonry-container">
+  @if (recipeChunks()) { @for (chunk of recipeChunks(); track $index) {
+  <div class="recipe-column">
+    @for (recipe of chunk; track recipe.id) {
+    <div class="recipe mb-1 flex flex-col space-between">
+      <div class="relative">
+        <img
+          class="recipe-img"
+          [src]="recipe.image ? recipe.image : 'assets/demo-recipe.svg'"
+          [alt]="recipe.title"
+        />
+
+        @if (authService.isLoggedIn()) {
+        <mat-icon
+          class="favorite-icon absolute"
+          [ngClass]="
+            this.authService.isFavorited(recipe.id)
+              ? 'filled-heart'
+              : 'empty-heart'
+          "
+          [matTooltip]="
+            this.authService.isFavorited(recipe.id) ? 'Remove' : 'Save'
+          "
+          (click)="this.authService.toggleFavoriteRecipe(recipe.id)"
+        >
+          {{
+            this.authService.isFavorited(recipe.id)
+              ? "favorite"
+              : "favorite_outline"
+          }}
+        </mat-icon>
+        }
+      </div>
+      <h1 class="text-center mx-1-5 mb-2">{{ recipe.title }}</h1>
+      <div class="flex flex-col space-around">
+        <ol class="w-full ml-1-5 mr-1-5">
+          @for (ingredient of recipe.ingredients; track $index) {
+          <li>
+            <div class="flex space-between items-baseline">
+              <div>
+                {{ ingredient }}
+              </div>
+              <img
+                class="match-ingredients ingredients"
+                src="assets/ingredients-mix.svg"
+                alt="ingredient"
+              />
+            </div>
+          </li>
+          }
+        </ol>
+        <div class="flex justify-center">
+          <h3
+            class="mx-1"
+            id="favorite-recipe-instructions"
+            [innerHTML]="recipe.instructions"
+          ></h3>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  } }
+</section>
