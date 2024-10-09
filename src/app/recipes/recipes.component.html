@@ -13,11 +13,21 @@
         @if (authService.isLoggedIn()) {
         <mat-icon
           class="favorite-icon absolute"
-          [ngClass]="isFavorited(recipe.id) ? 'filled-heart' : 'empty-heart'"
-          [matTooltip]="isFavorited(recipe.id) ? 'Remove' : 'Save'"
-          (click)="toggleFavoriteRecipe(recipe.id)"
+          [ngClass]="
+            this.authService.isFavorited(recipe.id)
+              ? 'filled-heart'
+              : 'empty-heart'
+          "
+          [matTooltip]="
+            this.authService.isFavorited(recipe.id) ? 'Remove' : 'Save'
+          "
+          (click)="this.authService.toggleFavoriteRecipe(recipe.id)"
         >
-          {{ isFavorited(recipe.id) ? "favorite" : "favorite_outline" }}
+          {{
+            this.authService.isFavorited(recipe.id)
+              ? "favorite"
+              : "favorite_outline"
+          }}
         </mat-icon>
         }
       </div>

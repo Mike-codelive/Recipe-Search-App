@@ -41,7 +41,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.userData.set(this.authService.onLogIn());
-
     this.authService.onLogIn();
   }
 
@@ -56,5 +55,12 @@ export class NavbarComponent implements OnInit {
 
   onCloseCredentials() {
     this.isCredentialOpen.set(false);
+  }
+
+  scrollToFavorites() {
+    const favoritesSection = document.getElementById('favorites');
+    if (favoritesSection) {
+      favoritesSection.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 }

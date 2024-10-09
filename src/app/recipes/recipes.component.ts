@@ -49,20 +49,10 @@ export class RecipesComponent implements AfterViewInit, OnInit {
 
   isFetchingPreparation: { [recipeId: number]: boolean } = {};
   recipePreparation: { [recipeId: number]: string | undefined } = {};
-  isFavoritedMap = new Map<number, boolean>();
+
+  isFavoritedMap = this.authService.isFavoritedMap;
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.authService.getFavoriteRecipes().subscribe({
-        next: (response) => {
-          this.populateFavorites(response.favorites);
-        },
-        error: (err) => {
-          console.error('Error fetching favorite recipes:', err);
-        },
-      });
-    }
-
     runInInjectionContext(this.injector, () => {
       effect(() => {
         const recipeData = this.recipes();
@@ -83,42 +73,6 @@ export class RecipesComponent implements AfterViewInit, OnInit {
         });
       }
     }, 0);
-  }
-
-  populateFavorites(favorites: any[]): void {
-    this.authService.favoriteRecipes = favorites.map(
-      (favorite: any) => favorite.recipe.id
-    );
-
-    favorites.forEach((favorite: any) => {
-      this.isFavoritedMap.set(favorite.recipe.id, true);
-    });
-  }
-
-  isFavorited(recipeId: number): boolean {
-    return this.isFavoritedMap.get(recipeId) || false;
-  }
-
-  async toggleFavoriteRecipe(recipe: any) {
-    const isFavorited = this.authService.favoriteRecipes.includes(
-      Number(recipe)
-    );
-
-    if (isFavorited) {
-      this.authService.deleteFavoriteRecipe(recipe);
-      this.isFavoritedMap.set(recipe, false);
-    } else {
-      const fullRecipe = await this.fetchRecipePreparation(recipe, false);
-
-      this.authService.saveFavoriteRecipe(fullRecipe).subscribe({
-        next: () => {
-          this.isFavoritedMap.set(recipe, true);
-        },
-        error: (err) => {
-          console.error('Error saving favorite recipe:', err);
-        },
-      });
-    }
   }
 
   fetchRecipePreparation(

@@ -1,6 +1,12 @@
 <h1 class="text-center">Favorite Recipes</h1>
-<section class="masonry-container">
-  @if (recipeChunks()) { @for (chunk of recipeChunks(); track $index) {
+@if (!this.authService.isLoggedIn()) {
+<h2 class="text-center">
+  <strong>Please log in to begin saving recipes!</strong>
+</h2>
+}
+<section id="favorites" class="masonry-container">
+  @if (this.authService.isLoggedIn()) { @if (this.authService.favoriteRecipes())
+  { @for (chunk of recipeChunks(); track $index) {
   <div class="recipe-column">
     @for (recipe of chunk; track recipe.id) {
     <div class="recipe mb-1 flex flex-col space-between">
@@ -39,7 +45,7 @@
           <li>
             <div class="flex space-between items-baseline">
               <div>
-                {{ ingredient }}
+                {{ ingredient.name }}
               </div>
               <img
                 class="match-ingredients ingredients"
@@ -61,5 +67,5 @@
     </div>
     }
   </div>
-  } }
+  } } }
 </section>

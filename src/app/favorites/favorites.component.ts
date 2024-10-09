@@ -19,10 +19,10 @@ export class FavoritesComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.authService.getFavoriteRecipes().subscribe({
         next: (response) => {
-          this.authService.populateFavorites(response.favorites);
-          // this.favoriteRecipes = response.favorites.map(
-          //   (favorite: any) => favorite.recipe
-          // );
+          const favRecipes = response.favorites.map((favorite: any) => {
+            return favorite.recipe;
+          });
+          this.authService.populateFavorites(favRecipes);
         },
         error: (err) => {
           console.error('Error fetching favorite recipes:', err);
@@ -30,11 +30,10 @@ export class FavoritesComponent implements OnInit {
       });
     }
   }
-
-  recipeChunks() {
+  recipeChunks = computed(() => {
     const allRecipes = this.favoriteRecipes();
     return this.chunkArray(allRecipes, 4);
-  }
+  });
 
   chunkArray(arr: any[], chunkSize: number) {
     const result = [];

@@ -13,7 +13,6 @@ const apiUrl = ApiUrl.apiUrl;
 export class AuthService {
   private httpClient = inject(HttpClient);
   userData = signal<UserData | null>(null);
-  // favoriteRecipes: number[] = [];
   favoriteRecipes = signal<any[]>([]);
   isFavoritedMap = new Map<number, boolean>();
 
@@ -91,14 +90,15 @@ export class AuthService {
     return Date.now() >= expirationTime;
   }
 
-  addFavoriteRecipe(recipeId: number) {
-    const updatedRecipes = [...this.favoriteRecipes(), recipeId];
+  addFavoriteRecipe(fullRecipe: any) {
+    const updatedRecipes = [...this.favoriteRecipes(), fullRecipe];
     this.favoriteRecipes.set(updatedRecipes);
+    this.isFavoritedMap.set(fullRecipe.id, true);
   }
 
   removeFavoriteRecipe(recipeId: number) {
     const updatedRecipes = this.favoriteRecipes().filter(
-      (id) => id !== recipeId
+      (recipe) => recipe.id !== recipeId
     );
     this.favoriteRecipes.set(updatedRecipes);
   }
@@ -139,7 +139,7 @@ export class AuthService {
       id: recipe.id,
       title: recipe.title,
       image: recipe.image,
-      extendedIngredients: recipe.extendedIngredients.map(
+      ingredients: recipe.extendedIngredients.map(
         (ingredient: { name: string }) => ({
           name: ingredient.name,
         })
@@ -147,7 +147,7 @@ export class AuthService {
       instructions: recipe.instructions,
     };
 
-    this.addFavoriteRecipe(recipe.id);
+    this.addFavoriteRecipe(recipeToSend);
     this.snackBar.open('Recipe added to favorites', 'Close', {
       duration: 1500,
     });
@@ -175,19 +175,11 @@ export class AuthService {
     return this.httpClient.get<any>(`${apiUrl}recipes/user`);
   }
 
-  // migrating reusable services
-
   populateFavorites(favorites: any[]): void {
-    // this.favoriteRecipes = favorites.map((favorite: any) => favorite.recipe.id);
-
-    const recipeFavoriteIds = favorites.map(
-      (favorite: any) => favorite.recipe.id
-    );
-
-    this.favoriteRecipes.set(recipeFavoriteIds);
+    this.favoriteRecipes.set(favorites);
 
     favorites.forEach((favorite: any) => {
-      this.isFavoritedMap.set(favorite.recipe.id, true);
+      return this.isFavoritedMap.set(favorite.id, true);
     });
   }
 
@@ -196,7 +188,7 @@ export class AuthService {
   }
 
   async toggleFavoriteRecipe(recipe: any) {
-    const isFavorited = this.favoriteRecipes().includes(recipe);
+    const isFavorited = this.isFavoritedMap.has(recipe);
 
     if (isFavorited) {
       this.deleteFavoriteRecipe(recipe);
